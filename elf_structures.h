@@ -245,12 +245,12 @@ typedef struct
 {
 	dword	r_offset;
 	dword	r_info;
-	__int32 r_addend;
+	int32_t r_addend;
 } elf_32_rela;
 
 typedef struct
 {
 	qword	r_offset;
 	qword	r_info;
-	__int64 r_addend;
+	int64_t r_addend;
 } ela_64_rela;
