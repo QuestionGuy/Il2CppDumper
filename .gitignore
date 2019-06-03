@@ -92,3 +92,11 @@ Release/Il2CppDumper.ipdb
 Release/out.idc
 *.idc
 *.sdf
+
+
+# gdb
+.gdb_history
+peda-session-dumper.txt
+
+# binary
+dumper

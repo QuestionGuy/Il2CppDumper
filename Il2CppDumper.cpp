@@ -7,6 +7,7 @@
 #include "elf_utils.h"
 #include "il2cpp_utils.h"
 #include <map>
+#include <string.h>
 
 elf_header* pLibIl2Cpp = 0;
 
@@ -172,7 +173,7 @@ union MultiType
 
 bool ReadMemBlob(Il2CppTypeEnum type, char* pBlob, MultiType* pOut)
 {
-	__try
+	try
 	{
 		switch (type)
 		{
@@ -216,7 +217,7 @@ bool ReadMemBlob(Il2CppTypeEnum type, char* pBlob, MultiType* pOut)
 			return false;
 		}
 	}
-	__except (1)
+	catch(void *e)
 	{
 		return false;
 	}
