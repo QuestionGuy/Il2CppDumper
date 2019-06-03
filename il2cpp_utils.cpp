@@ -91,13 +91,13 @@ void LoadMetadata(char* szFile)
 
 	if (pMetadataHdr->sanity != 0xFAB11BAF)
 	{
-		fprintf_s(stderr, "ERROR: Metadata file supplied is not valid metadata file.\n");
+		fprintf(stderr, "ERROR: Metadata file supplied is not valid metadata file.\n");
 		exit(1);
 	}
 
 	if (pMetadataHdr->version != 21)
 	{
-		fprintf_s(stderr, "ERROR: Metadata file supplied is not a supported version.\n");
+		fprintf(stderr, "ERROR: Metadata file supplied is not a supported version.\n");
 		exit(1);
 	}
 
@@ -116,6 +116,6 @@ void LoadMetadata(char* szFile)
 		image->typeCount = imageDefinition->typeCount;
 		image->entryPointIndex = imageDefinition->entryPointIndex;
 		image->token = imageDefinition->token;
-		fprintf_s(stdout, "// Image %d: %s - %u\n", imageIndex, image->name, image->typeStart);
+		fprintf(stdout, "// Image %d: %s - %u\n", imageIndex, image->name, image->typeStart);
 	}
 }

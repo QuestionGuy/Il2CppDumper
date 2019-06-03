@@ -124,21 +124,21 @@ char* get_type_name(Il2CppType* pType, bool* isClass = 0)
 void dump_method(MethodIndex idx)
 {
 	Il2CppMethodDefinition* pDef = GetMethodDefinition(idx);
-	fprintf_s(stdout, "\t");
+	fprintf(stdout, "\t");
 	Il2CppType* pReturnType = GetTypeFromTypeIndex(pDef->returnType);
 
 	if ((pDef->flags & METHOD_ATTRIBUTE_MEMBER_ACCESS_MASK) == METHOD_ATTRIBUTE_PRIVATE)
-		fprintf_s(stdout, "private ");
+		fprintf(stdout, "private ");
 	if ((pDef->flags & METHOD_ATTRIBUTE_MEMBER_ACCESS_MASK) == METHOD_ATTRIBUTE_PUBLIC)
-		fprintf_s(stdout, "public ");
+		fprintf(stdout, "public ");
 	if (pDef->flags & METHOD_ATTRIBUTE_VIRTUAL)
-		fprintf_s(stdout, "virtual ");
+		fprintf(stdout, "virtual ");
 	//if (pDef->flags & METHOD_ATTRIBUTE_FINAL) // No idea what METHOD_ATTRIBUTE_FINAL means but I only see it on standard lib functions so ignoring for now.
-	//	fprintf_s(stdout, "final ");
+	//	fprintf(stdout, "final ");
 	if (pDef->flags & METHOD_ATTRIBUTE_STATIC)
-		fprintf_s(stdout, "static ");
+		fprintf(stdout, "static ");
 
-	fprintf_s(stdout, "%s %s(", get_type_name(pReturnType), GetString(pDef->nameIndex));
+	fprintf(stdout, "%s %s(", get_type_name(pReturnType), GetString(pDef->nameIndex));
 	for (int i = 0; i < pDef->parameterCount; ++i)
 	{
 		Il2CppParameterDefinition* pParam = GetParameterFromIndex(pDef->parameterStart + i);
@@ -146,19 +146,19 @@ void dump_method(MethodIndex idx)
 		Il2CppType* pType = GetTypeFromTypeIndex(pParam->typeIndex);
 		char* szTypeName = get_type_name(pType);
 		if (pType->attrs & PARAM_ATTRIBUTE_OPTIONAL)
-			fprintf_s(stdout, "optional ");
+			fprintf(stdout, "optional ");
 		if (pType->attrs & PARAM_ATTRIBUTE_OUT)
-			fprintf_s(stdout, "out ");
+			fprintf(stdout, "out ");
 		if (i != pDef->parameterCount - 1)
 		{
-			fprintf_s(stdout, "%s %s, ", szTypeName, szParamName);
+			fprintf(stdout, "%s %s, ", szTypeName, szParamName);
 		}
 		else
 		{
-			fprintf_s(stdout, "%s %s", szTypeName, szParamName);
+			fprintf(stdout, "%s %s", szTypeName, szParamName);
 		}
 	}
-	fprintf_s(stdout, "); // %x - %d\n", pCodeRegistration->methodPointers[pDef->methodIndex], pDef->methodIndex);
+	fprintf(stdout, "); // %x - %d\n", pCodeRegistration->methodPointers[pDef->methodIndex], pDef->methodIndex);
 }
 
 union MultiType
@@ -229,16 +229,16 @@ void dump_field(FieldIndex idx)
 	Il2CppType* pType = GetTypeFromTypeIndex(pField->typeIndex);
 	Il2CppFieldDefaultValue* pDefault = GetFieldDefaultFromIndex(idx);
 
-	fprintf_s(stdout, "\t");
+	fprintf(stdout, "\t");
 	if ((pType->attrs & FIELD_ATTRIBUTE_PRIVATE) == FIELD_ATTRIBUTE_PRIVATE)
-		fprintf_s(stdout, "private ");
+		fprintf(stdout, "private ");
 	if ((pType->attrs & FIELD_ATTRIBUTE_PUBLIC) == FIELD_ATTRIBUTE_PUBLIC)
-		fprintf_s(stdout, "public ");
+		fprintf(stdout, "public ");
 	if (pType->attrs & FIELD_ATTRIBUTE_STATIC)
-		fprintf_s(stdout, "static ");
+		fprintf(stdout, "static ");
 	//if (pType->attrs & FIELD_ATTRIBUTE_INIT_ONLY) // This works just not very useful information.
-	//	fprintf_s(stdout, "readonly ");
-	fprintf_s(stdout, "%s %s", get_type_name(pType), GetString(pField->nameIndex));
+	//	fprintf(stdout, "readonly ");
+	fprintf(stdout, "%s %s", get_type_name(pType), GetString(pField->nameIndex));
 	if (pDefault && pDefault->dataIndex != -1)
 	{
 		char* pDef = GetDefaultValueFromIndex(pDefault->dataIndex);
@@ -253,28 +253,28 @@ void dump_field(FieldIndex idx)
 				switch (pTypeToUse->type)
 				{
 				case IL2CPP_TYPE_BOOLEAN:
-					fprintf_s(stdout, " = %s", multi.i ? "true" : "false");
+					fprintf(stdout, " = %s", multi.i ? "true" : "false");
 					break;
 				case IL2CPP_TYPE_I1:
 				case IL2CPP_TYPE_I2:
 				case IL2CPP_TYPE_I4:
 				case IL2CPP_TYPE_I8:
-					fprintf_s(stdout, " = %ld", multi.l);
+					fprintf(stdout, " = %ld", multi.l);
 					break;
 				case IL2CPP_TYPE_U1:
 				case IL2CPP_TYPE_U2:
 				case IL2CPP_TYPE_U4:
 				case IL2CPP_TYPE_U8:
-					fprintf_s(stdout, " = %lu", multi.l);
+					fprintf(stdout, " = %lu", multi.l);
 					break;
 				case IL2CPP_TYPE_R4:
-					fprintf_s(stdout, " = %f", multi.f);
+					fprintf(stdout, " = %f", multi.f);
 					break;
 				case IL2CPP_TYPE_R8:
-					fprintf_s(stdout, " = %g", multi.d);
+					fprintf(stdout, " = %g", multi.d);
 					break;
 				case IL2CPP_TYPE_STRING:
-					fprintf_s(stdout, " = @\"%s\"", multi.szString);
+					fprintf(stdout, " = @\"%s\"", multi.szString);
 					free(multi.szString);
 					break;
 				default:
@@ -284,40 +284,40 @@ void dump_field(FieldIndex idx)
 		}
 	}
 	if (!(pType->attrs & FIELD_ATTRIBUTE_STATIC))
-		fprintf_s(stdout, "; // 0x%x\n", GetFieldOffsetFromIndex(idx));
+		fprintf(stdout, "; // 0x%x\n", GetFieldOffsetFromIndex(idx));
 	else
-		fprintf_s(stdout, ";\n");
+		fprintf(stdout, ";\n");
 }
 
 void dump_class(TypeDefinitionIndex idx)
 {
 	Il2CppTypeDefinition* pDef = GetTypeDefFromIndex(idx);
-	fprintf_s(stdout, "// Namespace: %s\n", GetString(pDef->namespaceIndex));
+	fprintf(stdout, "// Namespace: %s\n", GetString(pDef->namespaceIndex));
 	
 	if (pDef->flags & TYPE_ATTRIBUTE_SERIALIZABLE)
-		fprintf_s(stdout, "[Serializable]\n");
+		fprintf(stdout, "[Serializable]\n");
 
 	if ((pDef->flags & TYPE_ATTRIBUTE_VISIBILITY_MASK) == TYPE_ATTRIBUTE_PUBLIC)
-		fprintf_s(stdout, "public ");
+		fprintf(stdout, "public ");
 	if (pDef->flags & TYPE_ATTRIBUTE_ABSTRACT)
-		fprintf_s(stdout, "abstract ");
+		fprintf(stdout, "abstract ");
 	if (pDef->flags & TYPE_ATTRIBUTE_SEALED)
-		fprintf_s(stdout, "sealed ");
+		fprintf(stdout, "sealed ");
 	
 	if (pDef->flags & TYPE_ATTRIBUTE_INTERFACE)
-		fprintf_s(stdout, "interface ");
+		fprintf(stdout, "interface ");
 	else
-		fprintf_s(stdout, "class ");
-	fprintf_s(stdout, "%s // TypeDefIndex: %d\n{\n", GetString(pDef->nameIndex), idx);
+		fprintf(stdout, "class ");
+	fprintf(stdout, "%s // TypeDefIndex: %d\n{\n", GetString(pDef->nameIndex), idx);
 
 	
-	fprintf_s(stdout, "\t// Fields\n");
+	fprintf(stdout, "\t// Fields\n");
 	for (FieldIndex i = pDef->fieldStart; i < (pDef->fieldStart + pDef->field_count); ++i)
 	{
 		dump_field(i);
 	}
 
-	fprintf_s(stdout, "\t// Methods\n");
+	fprintf(stdout, "\t// Methods\n");
 	for (MethodIndex i = pDef->methodStart; i < (pDef->methodStart + pDef->method_count); ++i)
 	{
 		dump_method(i);
@@ -351,7 +351,7 @@ void LoadIl2CppLib(char* szFile)
 
 	if (pLibIl2Cpp->m_dwFormat != 0x464c457f)
 	{
-		fprintf_s(stderr, "ERROR: il2cpp lib provided is not a valid ELF file.\n");
+		fprintf(stderr, "ERROR: il2cpp lib provided is not a valid ELF file.\n");
 		exit(1);
 	}
 	
