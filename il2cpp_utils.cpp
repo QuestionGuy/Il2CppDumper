@@ -97,8 +97,8 @@ void LoadMetadata(char* szFile)
 
 	if (pMetadataHdr->version != 21)
 	{
-		fprintf(stderr, "ERROR: Metadata file supplied is not a supported version.\n");
-		exit(1);
+		fprintf(stderr, "WARNING: Metadata file supplied is not a supported version (supported: 21, file: %d).\n", pMetadataHdr->version);
+		// exit(1);
 	}
 
 	uiImageCount = pMetadataHdr->imagesCount / sizeof(Il2CppImageDefinition);
